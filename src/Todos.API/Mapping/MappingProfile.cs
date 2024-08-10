@@ -16,6 +16,7 @@ public class MappingProfile : Profile
         CreateMap<PaginatedList<TodoTask>, PaginatedListViewModel<TodoTaskViewModel>>()
             .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))
             .ForMember(dest => dest.PageIndex, opt => opt.MapFrom(src => src.PageIndex))
-            .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(src => src.TotalPages));
+            .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(src => src.TotalPages))
+            .ForMember(dest => dest.TotalCount, opt => opt.MapFrom(src => src.TotalCount));
     }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Box, FormControlLabel, Checkbox, Button, Modal, Typography } from '@mui/material';
+import { TextField, Box, Button, Modal, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -13,14 +13,13 @@ const Filter: React.FC = () => {
   const [name, setName] = useState('');
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
-  const [isActive, setIsActive] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleFilter = () => {
-    //dispatch(filterTodos({ name, fromDate, toDate, isActive }));
+    //dispatch(filterTodos({ name, fromDate, toDate }));
     handleClose();
   };
 
@@ -43,20 +42,19 @@ const Filter: React.FC = () => {
             <Box sx={{ mt: 2 }}>
               <TextField label="Task Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth margin="normal" />
               <DateTimePicker
-                label="From Date"
+                label="Deadline From"
                 value={fromDate}
                 onChange={setFromDate}
                 views={['year', 'month', 'day', 'hours', 'minutes']}
                 renderInput={(props) => <TextField {...props} fullWidth margin="normal" />}
               />
               <DateTimePicker
-                label="To Date"
+                label="Deadline To"
                 value={toDate}
                 onChange={setToDate}
                 views={['year', 'month', 'day', 'hours', 'minutes']}
                 renderInput={(props) => <TextField {...props} fullWidth margin="normal" />}
               />
-              <FormControlLabel control={<Checkbox checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />} label="Active" />
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                 <Button onClick={handleClose} variant="outlined" color="secondary">
                   Cancel

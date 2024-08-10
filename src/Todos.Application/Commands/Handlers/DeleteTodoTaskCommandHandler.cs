@@ -21,9 +21,7 @@ public class DeleteTodoTaskCommandHandler : IRequestHandler<DeleteTodoTaskComman
             throw new Exception($"TodoTask with ID {request.TodoTaskId} not found.");
         }
 
-        DateTime now = DateTime.Now;
-        existingTask.LastModified = now;
-        existingTask.DeletedDate = now;
+        existingTask.DeletedDate = DateTime.Now;
 
         await _repository.UpdateAsync(existingTask);
 

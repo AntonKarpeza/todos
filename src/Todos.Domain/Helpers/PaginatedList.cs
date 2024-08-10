@@ -7,12 +7,14 @@ public class PaginatedList<T>
     public List<T> Items { get; private set; }
     public int PageIndex { get; }
     public int TotalPages { get; }
+    public int TotalCount { get; }
 
     public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
     {
         PageIndex = pageIndex;
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         Items = items;
+        TotalCount = count;
     }
 
     public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)

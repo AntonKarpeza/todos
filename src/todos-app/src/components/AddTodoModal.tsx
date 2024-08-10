@@ -25,7 +25,6 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       const newTodo: Todo = {
         todoTaskName,
         deadline: deadline ? deadline.toISOString() : undefined,
-        isDone: false,
       };
 
       const createdTodoTaskId = await createTodoTask(newTodo).unwrap();

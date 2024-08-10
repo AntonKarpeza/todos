@@ -18,6 +18,9 @@ interface TodosGridProps {
 }
 
 const TodosGrid: React.FC<TodosGridProps> = ({ isDone, sortBy, sortDirection, deadlineTo }) => {
+
+
+
   const [isEditTodoModalOpen, setIsEditTodoModalOpen] = useState(false);
   const [selectedTodoTaskId, setSelectedTodoTaskId] = useState<number | null>(null);
 
@@ -62,7 +65,7 @@ const TodosGrid: React.FC<TodosGridProps> = ({ isDone, sortBy, sortDirection, de
 
   useEffect(() => {
     refetch();
-  }, [todos.items, refetch]);
+  }, [refetch]);
 
   const handleToggle = async (id: number) => {
     try {

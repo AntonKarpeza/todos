@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import TodosGrid from './TodosGrid';
 import AddTodoModal from './AddTodoModal';
 import Filter from './Filter';
 import TabContext from '@mui/lab/TabContext';
@@ -7,6 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Tab, Grid, Container } from '@mui/material';
+import TodosTable from './TodosTable';
 
 const Content: React.FC = () => {
   const [value, setValue] = React.useState('1');
@@ -49,11 +49,20 @@ const Content: React.FC = () => {
             <Tab label="Complited" value="4" />
           </TabList>
         </Box>
-        <TabPanel value="1"><TodosGrid sortBy="TodoTaskId" sortDirection="desc"/></TabPanel>
-        <TabPanel value="2"><TodosGrid isDone={false} sortBy="TodoTaskId" sortDirection="desc"/></TabPanel>
-        <TabPanel value="3"><TodosGrid isDone={false} deadlineTo={new Date()}/></TabPanel>
-        <TabPanel value="4"><TodosGrid isDone={true}/></TabPanel>
+        <TabPanel value="1">
+          <TodosTable sortBy="TodoTaskId" sortDirection="desc"/>
+        </TabPanel>
+        <TabPanel value="2">
+          <TodosTable isDone={false} sortBy="TodoTaskId" sortDirection="desc"/>
+        </TabPanel>
+        <TabPanel value="3">
+          <TodosTable isDone={false} deadlineTo={new Date()}/>
+        </TabPanel>
+        <TabPanel value="4">
+          <TodosTable isDone={true}/>
+        </TabPanel>
       </TabContext>
+
 
       <AddTodoModal
         isOpen={isAddTodoModalOpen}
