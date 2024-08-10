@@ -32,6 +32,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { TodosState } from '../redux/TodosState'; // Adjust this path and type based on your actual setup
+import { useSelector } from 'react-redux';
 
 
 
@@ -45,6 +47,10 @@ interface TodosTableProps {
 }
 
 const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, deadlineTo }) => {
+
+  const refreshData = useSelector((state: { todos: TodosState }) => state.todos.refreshData);
+
+
   const [isEditTodoModalOpen, setIsEditTodoModalOpen] = useState(false);
   const [selectedTodoTaskId, setSelectedTodoTaskId] = useState<number | null>(null);
   const [selectedToRemoveTodoTaskId, setSelectedToRemoveTodoTaskId] = useState<number | null>(null);
@@ -98,7 +104,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [refetch, refreshData]);
 
   const handleToggle = async (id?: number) => {
     if (!id) return;
@@ -154,6 +160,8 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
     setOpen(false);
   };
 
+
+  //snack bar
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
 
@@ -164,6 +172,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
   const handleSnackBarClose = () => {
     setOpenSnackBar(false);
   };
+  //____________________________
 
 
 
@@ -212,6 +221,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
       </TableContainer>
 
       {(isTyping) && <LinearProgress variant="determinate"/>}
+
       <TablePagination
         rowsPerPageOptions={[5, 10, 15]}
         component="div"

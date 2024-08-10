@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Modal, Button, Typography } from '@mui/material';
 import { useCreateTodoTaskMutation } from '../services/todoApi';
 import { useDispatch } from 'react-redux';
-import { triggerTableRefresh } from '../redux/todosSlice';
+import { addTodo } from '../redux/todosSlice';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
 import TodoForm from './TodoForm';
 
@@ -28,7 +28,7 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       };
 
       await createTodoTask(newTodo).unwrap();
-      dispatch(triggerTableRefresh());
+      dispatch(addTodo("TODO has been successfully added"));
 
       handleClose();
     } catch (err) {

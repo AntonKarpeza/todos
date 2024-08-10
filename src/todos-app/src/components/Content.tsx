@@ -6,6 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Tab, Grid, Container } from '@mui/material';
 import TodosTable from './TodosTable';
+import TodoSnackbar from './TodoSnackbar';
 
 
 
@@ -76,6 +77,8 @@ const Content: React.FC = () => {
         isOpen={isAddTodoModalOpen}
         handleClose={handleCloseAddTodoModal}
       />
+
+      <TodoSnackbar/>
 
 
 
