@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Checkbox from '@mui/material/Checkbox';
-import { FilterTodoTasksViewModel } from '../interfaces/ViewModels';
+import { FilterTodoTasksViewModel } from '../interfaces/FilterTodoTasksViewModel';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import EditTodoModal from './EditTodoModal';
@@ -46,7 +46,7 @@ const TodosGrid: React.FC<TodosGridProps> = ({ isDone, sortBy, sortDirection, de
     deadlineFrom: undefined,
     deadlineTo: deadlineTo ? deadlineTo.toISOString() : undefined,
     todoTaskName: undefined,
-    sortBy: sortBy,
+    sortBy: sortBy ? sortBy : "TodoTaskId",
     sortDirection: sortDirection,
   };
 

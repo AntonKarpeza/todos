@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Box, Modal, Button, Typography } from '@mui/material';
 import { useCreateTodoTaskMutation } from '../services/todoApi';
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../redux/todosSlice';
-import { Todo } from '../interfaces/Todo';
+import { triggerTableRefresh } from '../redux/todosSlice';
+import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
 import TodoForm from './TodoForm';
 
 interface AddTodoModalProps {
@@ -22,13 +22,13 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
     event.preventDefault();
 
     try {
-      const newTodo: Todo = {
+      const newTodo: TodoTaskViewModel = {
         todoTaskName,
         deadline: deadline ? deadline.toISOString() : undefined,
       };
 
-      const createdTodoTaskId = await createTodoTask(newTodo).unwrap();
-      dispatch(addTodo({ ...newTodo, todoTaskId: createdTodoTaskId }));
+      await createTodoTask(newTodo).unwrap();
+      dispatch(triggerTableRefresh());
 
       handleClose();
     } catch (err) {

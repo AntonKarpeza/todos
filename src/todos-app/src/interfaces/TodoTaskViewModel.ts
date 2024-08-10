@@ -1,4 +1,4 @@
-export interface Todo {
+export interface TodoTaskViewModel {
     todoTaskId?: number;
     todoTaskName: string;
     deadline?: string;

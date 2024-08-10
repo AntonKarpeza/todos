@@ -1,45 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './store'
-
-interface Todo {
-  todoTaskId: number;
-  todoTaskName: string;
-  deadline?: string;
-  isDone: boolean;
-}
-
-interface TodosState {
-  todos: Todo[];
-}
+import { TodosState } from '../interfaces/TodosState';
+import { FilterTodoTasksViewModel } from '../interfaces/FilterTodoTasksViewModel';
 
 const initialState: TodosState = {
-  todos: [],
+  refresh: false,
+  filter: {} as FilterTodoTasksViewModel,
 };
 
 const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    addTodo: (state, action: PayloadAction<Todo>) => {
-      state.todos.push(action.payload);
+    triggerTableRefresh: state => {
+      state.refresh = !state.refresh;
     },
-    updateTodo: (state, action: PayloadAction<Todo>) => {
-      const index = state.todos.findIndex(todo => todo.todoTaskId === action.payload.todoTaskId);
-      if (index !== -1) {
-        state.todos[index] = action.payload;
-      }
-    },
-    deleteTodo: (state, action: PayloadAction<number>) => {
-      state.todos = state.todos.filter(todo => todo.todoTaskId !== action.payload);
-    },
-    setTodos: (state, action: PayloadAction<Todo[]>) => {
-      state.todos = action.payload;
-    },
+    // filterTodo: (state, action: PayloadAction<FilterTodoTasksViewModel>) => {
+    //     state.filter = ;
+    // },
+    // addTodo: (state, action: PayloadAction<Todo>) => {
+    //   state.todos.push(action.payload);
+    // },
+    // updateTodo: (state, action: PayloadAction<Todo>) => {
+    //   const index = state.todos.findIndex(todo => todo.todoTaskId === action.payload.todoTaskId);
+    //   if (index !== -1) {
+    //     state.todos[index] = action.payload;
+    //   }
+    // },
+    // deleteTodo: (state, action: PayloadAction<number>) => {
+    //   state.todos = state.todos.filter(todo => todo.todoTaskId !== action.payload);
+    // },
+    // setTodos: (state, action: PayloadAction<Todo[]>) => {
+    //   state.todos = action.payload;
+    // },
   },
 });
 
-export const { addTodo, updateTodo, deleteTodo, setTodos } = todosSlice.actions;
-
-export const selectTodos = (state: RootState) => state.todos.todos;
+export const { triggerTableRefresh} = todosSlice.actions;
 
 export default todosSlice.reducer;

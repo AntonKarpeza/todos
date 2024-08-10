@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import AddTodoModal from './AddTodoModal';
-import Filter from './Filter';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Tab, Grid, Container } from '@mui/material';
 import TodosTable from './TodosTable';
+
+
+
+
+
+
 
 const Content: React.FC = () => {
   const [value, setValue] = React.useState('1');
@@ -24,18 +29,21 @@ const Content: React.FC = () => {
     setIsAddTodoModalOpen(false);
   };
 
+
+  
+
+ 
+
   return (
     <Container>
       <Box sx={{ flexGrow: 1, p: 1, m: 2 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={10}></Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={11}>
+          </Grid>
           <Grid item xs={1}>
             <Button variant="contained" color="primary" onClick={handleOpenAddTodoModal}>
               <AddIcon />
             </Button>
-          </Grid>
-          <Grid item xs={1}>
-            <Filter />
           </Grid>
         </Grid>
       </Box>
@@ -50,10 +58,10 @@ const Content: React.FC = () => {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <TodosTable sortBy="TodoTaskId" sortDirection="desc"/>
+          <TodosTable sortBy="TodoTaskId"/>
         </TabPanel>
         <TabPanel value="2">
-          <TodosTable isDone={false} sortBy="TodoTaskId" sortDirection="desc"/>
+          <TodosTable isDone={false} sortBy="TodoTaskId"/>
         </TabPanel>
         <TabPanel value="3">
           <TodosTable isDone={false} deadlineTo={new Date()}/>
@@ -68,6 +76,9 @@ const Content: React.FC = () => {
         isOpen={isAddTodoModalOpen}
         handleClose={handleCloseAddTodoModal}
       />
+
+
+
     </Container>
   );
 };

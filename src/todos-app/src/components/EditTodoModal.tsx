@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Modal, Typography, Button } from '@mui/material';
 import { useUpdateTodoTaskMutation, useGetTodoTaskQuery } from '../services/todoApi';
-import { useDispatch } from 'react-redux';
-import { updateTodo } from '../redux/todosSlice';
 import TodoForm from './TodoForm';
-import { Todo } from '../interfaces/Todo';
+import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
+import { Snackbar } from '@mui/base/Snackbar';
 
 interface EditTodoModalProps {
   isOpen: boolean;
@@ -14,7 +13,6 @@ interface EditTodoModalProps {
 }
 
 const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todoTaskId, refetch }) => {
-  const dispatch = useDispatch();
 
   const [todoTaskName, setTodoTaskName] = useState('');
   const [deadline, setDeadline] = useState<Date | null>(null);
@@ -32,7 +30,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
     event.preventDefault();
 
     try {
-      const updatedTodo: Todo = {
+      const updatedTodo: TodoTaskViewModel = {
         todoTaskId,
         todoTaskName,
         deadline: deadline ? deadline.toISOString() : undefined,
@@ -40,9 +38,8 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
       };
 
       await updateTodoTask(updatedTodo).unwrap();
-      dispatch(updateTodo(updatedTodo));
       handleClose();
-      refetch(); // Refetch the tasks after updating
+      refetch();
     } catch (err) {
       console.error('Failed to update the task:', err);
     }

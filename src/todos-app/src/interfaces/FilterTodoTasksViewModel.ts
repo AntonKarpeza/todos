@@ -1,11 +1,4 @@
-export interface PaginatedListViewModel<T> {
-    items: T[];
-    pageIndex: number;
-    totalPages: number;
-    totalCount: number;
-  }
-  
-  export interface FilterTodoTasksViewModel {
+export interface FilterTodoTasksViewModel {
     pageNumber: number;
     pageSize: number;
     isDone?: boolean;
