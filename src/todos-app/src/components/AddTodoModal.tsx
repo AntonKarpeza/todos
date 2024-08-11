@@ -17,7 +17,7 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
 
   const [todoTaskName, setTodoTaskName] = useState('');
   const [deadline, setDeadline] = useState<Date | null>(null);
-  const [createTodoTask, { isLoading: isCreating, error: createError }] = useCreateTodoTaskMutation();
+  const [createTodoTask, { isLoading: isCreating }] = useCreateTodoTaskMutation();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -63,7 +63,6 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
               {isCreating ? 'Saving...' : 'Add Todo'}
             </Button>
           </Box>
-          {createError && <Typography color="error">{createError.toString()}</Typography>}
         </Box>
       </Box>
     </Modal>

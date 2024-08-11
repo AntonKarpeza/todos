@@ -3,7 +3,6 @@ import { Box, Modal, Typography, Button } from '@mui/material';
 import { useUpdateTodoTaskMutation, useGetTodoTaskQuery } from '../services/todoApi';
 import TodoForm from './TodoForm';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
-import { Snackbar } from '@mui/base/Snackbar';
 
 interface EditTodoModalProps {
   isOpen: boolean;
@@ -17,7 +16,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
   const [todoTaskName, setTodoTaskName] = useState('');
   const [deadline, setDeadline] = useState<Date | null>(null);
   const { data: task } = useGetTodoTaskQuery(todoTaskId);
-  const [updateTodoTask, { isLoading: isUpdating, error: updateError }] = useUpdateTodoTaskMutation();
+  const [updateTodoTask, { isLoading: isUpdating }] = useUpdateTodoTaskMutation();
 
   useEffect(() => {
     if (task) {
@@ -52,7 +51,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Box sx={{ ...style, width: 400 }}>
+      <Box className="modal-todo-box">
         <Typography id="modal-title" variant="h6" component="h2">
           Edit Todo Task
         </Typography>
@@ -71,22 +70,10 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
               {isUpdating ? 'Saving...' : 'Save Changes'}
             </Button>
           </Box>
-          {updateError && <Typography color="error">{updateError.toString()}</Typography>}
         </Box>
       </Box>
     </Modal>
   );
-};
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 };
 
 export default EditTodoModal;

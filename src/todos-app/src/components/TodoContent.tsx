@@ -14,7 +14,7 @@ import TodoSnackbar from './TodoSnackbar';
 
 
 
-const Content: React.FC = () => {
+const TodoContent: React.FC = () => {
   const [value, setValue] = React.useState('1');
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
 
@@ -86,4 +86,4 @@ const Content: React.FC = () => {
   );
 };
 
-export default Content;
+export default TodoContent;
