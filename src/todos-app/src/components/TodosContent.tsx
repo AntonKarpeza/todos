@@ -4,7 +4,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Tab, Grid, Container } from '@mui/material';
+import { Box, Button, Tab, Grid, Container, Tooltip } from '@mui/material';
 import TodosTable from './TodosTable';
 import TodoSnackbar from './common/TodoSnackbar';
 
@@ -26,14 +26,16 @@ const TodosContent: React.FC = () => {
 
   return (
     <Container>
-      <Box sx={{ flexGrow: 1, p: 1, m: 2 }}>
-        <Grid container spacing={1}>
+      <Box sx={{ flexGrow: 2, p: 1, m: 2 }}>
+        <Grid container>
           <Grid item xs={11}>
           </Grid>
           <Grid item xs={1}>
-            <Button variant="contained" color="primary" onClick={handleOpenAddTodoModal}>
-              <AddIcon />
-            </Button>
+            <Tooltip title="Add TODO" placement="right">
+              <Button variant="contained" color="success" size="small" onClick={handleOpenAddTodoModal}>
+                <AddIcon />
+              </Button>
+            </Tooltip>
           </Grid>
         </Grid>
       </Box>

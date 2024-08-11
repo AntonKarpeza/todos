@@ -70,7 +70,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
             setIsFormValid={setIsFormValid}
           />
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-            <Button onClick={handleClose} variant="outlined" color="secondary">
+            <Button onClick={handleClose} variant="outlined">
               Cancel
             </Button>
             <Button type="submit" variant="contained" color="primary" disabled={!isFormValid}>

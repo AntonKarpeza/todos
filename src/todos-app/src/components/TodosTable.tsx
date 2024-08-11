@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useGetTodoTasksQuery } from '../services/todoApi';
 import {
-  useGetTodoTasksQuery
-} from '../services/todoApi';
-import {
-  Button,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -13,6 +11,7 @@ import {
   TableRow,
   Paper,
   LinearProgress,
+  Tooltip,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { FilterTodoTasksViewModel } from '../interfaces/FilterTodoTasksViewModel';
@@ -92,18 +91,21 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
       <SearchTodos onSearch={handleSearch} />
       {isLoading && <LinearProgress />}
       <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-        <Table stickyHeader aria-label="todos table">
+        <Table stickyHeader aria-label="todos table" size="small">
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
               <TableCell>Todo</TableCell>
-              <TableCell>Deadline</TableCell>
+              <TableCell align="center">Deadline</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {todos.items.map((todo) => (
-              <TableRow hover key={todo.todoTaskId}>
+              <TableRow 
+                key={todo.todoTaskId}
+                className={`${!todo.isDone && todo.deadline && new Date(todo.deadline) <= new Date() ? 'expired-row' : 'normal-row'}`}
+              >
                 <TableCell padding="checkbox">
                   <ToggleTodo
                       todoTaskId={todo.todoTaskId}
@@ -111,13 +113,15 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
                     />
                 </TableCell>
                 <TableCell>{todo.todoTaskName}</TableCell>
-                <TableCell>
+                <TableCell align="center" style={{ width: 120 }}>
                   {todo.deadline ? format(new Date(todo.deadline), 'Pp', { locale: de }) : 'No'}
                 </TableCell>
-                <TableCell>
-                  <Button variant="text" color="primary" onClick={() => handleOpenEditTodoModal(todo.todoTaskId)}>
-                    <EditIcon />
-                  </Button>
+                <TableCell style={{ width: 80 }}>
+                  <Tooltip title="Edit TODO">
+                    <IconButton color="primary" onClick={() => handleOpenEditTodoModal(todo.todoTaskId)}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
                   <DeleteTodo todoTaskId={todo.todoTaskId}/>
                 </TableCell>
               </TableRow>

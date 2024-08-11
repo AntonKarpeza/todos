@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
+import { Button, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, Tooltip } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDeleteTodoTaskMutation } from '../services/todoApi';
 import { useDispatch } from 'react-redux';
@@ -37,28 +37,30 @@ const DeleteTodo: React.FC<DeleteTodoProps> = ({ todoTaskId }) => {
 
   return (
     <>
-      <Button variant="text" color="primary" onClick={handleOpen}>
-        <DeleteForeverIcon />
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to remove this TODO?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} autoFocus>
-            No
-          </Button>
-          <Button onClick={handleDelete} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Tooltip title="Delete TODO" placement="right">
+            <IconButton aria-label="delete" color="secondary" onClick={handleOpen}>
+                <DeleteForeverIcon />
+            </IconButton>
+        </Tooltip>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="responsive-dialog-title"
+        >
+            <DialogContent>
+                <DialogContentText>
+                    Are you sure you want to remove this TODO?
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose} autoFocus>
+                    No
+                </Button>
+                <Button onClick={handleDelete} autoFocus>
+                    Yes
+                </Button>
+            </DialogActions>
+        </Dialog>
     </>
   );
 };

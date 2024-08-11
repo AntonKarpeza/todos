@@ -55,7 +55,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, dead
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={de}>
       <TextField
-        label="Task Name"
+        label="TODO"
         value={todoTaskName}
         onChange={handleNameChange}
         fullWidth
