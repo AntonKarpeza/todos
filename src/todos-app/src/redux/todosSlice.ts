@@ -33,6 +33,6 @@ const todosSlice = createSlice({
   },
 });
 
-export const { addTodo, editTodo, toggleIsDone, errorCaught } = todosSlice.actions;
+export const { addTodo, editTodo, deleteTodo, toggleIsDone, errorCaught } = todosSlice.actions;
 
 export default todosSlice.reducer;

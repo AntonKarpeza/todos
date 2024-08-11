@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  useGetTodoTasksQuery,
-  useDeleteTodoTaskMutation,
+  useGetTodoTasksQuery
 } from '../services/todoApi';
 import {
   Button,
@@ -17,23 +16,16 @@ import {
   LinearProgress,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { FilterTodoTasksViewModel } from '../interfaces/FilterTodoTasksViewModel';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import EditTodoModal from './EditTodoModal';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import { TodosState } from '../redux/interfaces/TodosState';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import ToggleTodo from './ToggleTodo'; 
+import DeleteTodo from './DeleteTodo';
 
 
 
@@ -45,13 +37,11 @@ interface TodosTableProps {
 }
 
 const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, deadlineTo }) => {
-  const dispatch = useDispatch();
   const refreshData = useSelector((state: { todos: TodosState }) => state.todos.refreshData);
 
 
   const [isEditTodoModalOpen, setIsEditTodoModalOpen] = useState(false);
   const [selectedTodoTaskId, setSelectedTodoTaskId] = useState<number | null>(null);
-  const [selectedToRemoveTodoTaskId, setSelectedToRemoveTodoTaskId] = useState<number | null>(null);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const handleOpenEditTodoModal = (todoTaskId?: number) => {
@@ -97,30 +87,11 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
 
   const { data: todos = { items: [], totalPages: 0, totalCount: 0 }, error, isLoading, refetch } =
     useGetTodoTasksQuery(filter);
-  const [deleteTodoTask] = useDeleteTodoTaskMutation();
 
   useEffect(() => {
     refetch();
   }, [refetch, refreshData]);
 
-
-  const handleDeleteConfirm = async (id?: number) => {
-    if (!id) return;
-    setSelectedToRemoveTodoTaskId(id);
-    setOpen(true);
-  };
-
-  const handleDelete = async () => {
-    if (!selectedToRemoveTodoTaskId) return;
-    try {
-      await deleteTodoTask(selectedToRemoveTodoTaskId).unwrap();
-      refetch();
-      setOpen(false);
-      setOpenSnackBar(true);
-    } catch (err) {
-      console.error('Failed to delete todo', err);
-    }
-  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPaginationModel((prev) => ({ ...prev, page: newPage }));
@@ -139,30 +110,6 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
     setIsTyping(true); // Start typing
   };
 
-
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-
-  //snack bar
-  const [openSnackBar, setOpenSnackBar] = React.useState(false);
-
-
-  const handleSnackBarClick = () => {
-    setOpenSnackBar(true);
-  };
-
-  const handleSnackBarClose = () => {
-    setOpenSnackBar(false);
-  };
-  //____________________________
-
-
-
   return (
     <>
       <TextField
@@ -173,6 +120,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
         fullWidth
         margin="normal"
       />
+      {(isTyping || isLoading) && <LinearProgress/>}
       <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
         <Table stickyHeader aria-label="todos table">
           <TableHead>
@@ -200,17 +148,13 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
                   <Button variant="text" color="primary" onClick={() => handleOpenEditTodoModal(todo.todoTaskId)}>
                     <EditIcon />
                   </Button>
-                  <Button variant="text" color="primary" onClick={() => handleDeleteConfirm(todo.todoTaskId)}>
-                    <DeleteForeverIcon />
-                  </Button>
+                  <DeleteTodo todoTaskId={todo.todoTaskId}/>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
-      {(isTyping) && <LinearProgress variant="determinate"/>}
 
       <TablePagination
         rowsPerPageOptions={[5, 10, 15]}
@@ -229,48 +173,6 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
           todoTaskId={selectedTodoTaskId}
         />
       )}
-
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to remove this TODO?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            No
-          </Button>
-          <Button onClick={handleDelete} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      
-
-      <div>
-        <Button onClick={handleSnackBarClick}>Open Snackbar</Button>
-        <Snackbar open={openSnackBar} autoHideDuration={1000} onClose={handleSnackBarClose}>
-          <Alert
-            onClose={handleSnackBarClose}
-            severity="success"
-            variant="filled"
-            sx={{ width: '100%' }}
-          >
-            This is a success Alert inside a Snackbar!
-          </Alert>
-        </Snackbar>
-      </div>
-
-
-
-
-
     </>
   );
 };
