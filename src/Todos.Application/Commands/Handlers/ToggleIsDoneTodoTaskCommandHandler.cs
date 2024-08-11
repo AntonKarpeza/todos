@@ -14,6 +14,11 @@ public class ToggleIsDoneTodoTaskCommandHandler : IRequestHandler<ToggleIsDoneTo
 
     public async Task<Unit> Handle(ToggleIsDoneTodoTaskCommand request, CancellationToken cancellationToken)
     {
+        if (request.TodoTaskId == 0)
+        {
+            throw new ArgumentException("Invalid Task ID");
+        }
+
         var existingTask = await _repository.GetByIdAsync(request.TodoTaskId);
 
         if (existingTask == null)

@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Todos.Application.Commands;
 using Todos.Application.Commands.Handlers;
 using Todos.Application.Queries;
 using Todos.Application.Queries.Handlers;
+using Todos.Application.Validators;
 using Todos.Domain.Entities;
 using Todos.Domain.Helpers;
 using Todos.Domain.Interfaces;
@@ -27,5 +29,8 @@ public class NativeInjectorBootStrapper
         // Register MediatR Queries
         services.AddTransient<IRequestHandler<GetTodoTasksQuery, PaginatedList<TodoTask>>, GetTodoTasksQueryHandler>();
         services.AddTransient<IRequestHandler<GetTodoTaskByIdQuery, TodoTask?>, GetTodoTaskByIdQueryHandler>();
+
+        // Register Validators
+        services.AddTransient<IValidator<TodoTask>, TodoTaskValidator>();
     }
 }

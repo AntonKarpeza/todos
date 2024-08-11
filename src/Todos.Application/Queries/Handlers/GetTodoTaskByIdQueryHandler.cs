@@ -15,6 +15,11 @@ public class GetTodoTaskByIdQueryHandler : IRequestHandler<GetTodoTaskByIdQuery,
 
     public async Task<TodoTask?> Handle(GetTodoTaskByIdQuery request, CancellationToken cancellationToken)
     {
+        if (request.TodoTaskId == 0)
+        {
+            throw new ArgumentException("Invalid Task ID");
+        }
+
         return await _repository.GetByIdAsync(request.TodoTaskId);
     }
 }

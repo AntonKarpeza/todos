@@ -23,8 +23,13 @@ public class TodoTaskController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedListViewModel<TodoTaskViewModel>>> GetTodoTasks([FromQuery] FilterTodoTasksViewModel filter)
+    public async Task<ActionResult<PaginatedListViewModel<TodoTaskViewModel>>> GetTodoTasks([FromQuery] FilterTodoTasksViewModel? filter)
     {
+        if (filter == null)
+        {
+            return BadRequest("Invalid filter.");
+        }
+
         var query = _mapper.Map<GetTodoTasksQuery>(filter);
         var todoTasks = await _mediator.Send(query);
         var result = _mapper.Map<PaginatedListViewModel<TodoTaskViewModel>>(todoTasks);
@@ -34,11 +39,17 @@ public class TodoTaskController : ControllerBase
     [HttpGet("{todoTaskId}")]
     public async Task<ActionResult<TodoTaskViewModel>> GetTodoTask(int todoTaskId)
     {
+        if (todoTaskId <= 0)
+        {
+            return BadRequest("Invalid Task ID.");
+        }
+
         var todoTask = await _mediator.Send(new GetTodoTaskByIdQuery(todoTaskId));
         if (todoTask.TodoTaskId == 0)
         {
-            return NotFound();
+            return NotFound("Task not found.");
         }
+
         var todoTaskViewModel = _mapper.Map<TodoTaskViewModel>(todoTask);
         return Ok(todoTaskViewModel);
     }
@@ -46,6 +57,11 @@ public class TodoTaskController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<int>> CreateTodoTask(TodoTaskViewModel todoTask)
     {
+        if (string.IsNullOrWhiteSpace(todoTask.TodoTaskName))
+        {
+            return BadRequest("Task name cannot be empty.");
+        }
+
         var todoTaskId = await _mediator.Send(new CreateTodoTaskCommand(todoTask.TodoTaskName, todoTask.Deadline));
         return Ok(todoTaskId);
     }
@@ -53,6 +69,11 @@ public class TodoTaskController : ControllerBase
     [HttpDelete("{todoTaskId}")]
     public async Task<IActionResult> DeleteTodoTask(int todoTaskId)
     {
+        if (todoTaskId <= 0)
+        {
+            return BadRequest("Invalid Task ID.");
+        }
+
         await _mediator.Send(new DeleteTodoTaskCommand(todoTaskId));
         return NoContent();
     }
@@ -60,6 +81,11 @@ public class TodoTaskController : ControllerBase
     [HttpPatch("{todoTaskId}/status")]
     public async Task<IActionResult> ToggleIsDoneTodoTask(int todoTaskId)
     {
+        if (todoTaskId <= 0)
+        {
+            return BadRequest("Invalid Task ID.");
+        }
+
         await _mediator.Send(new ToggleIsDoneTodoTaskCommand(todoTaskId));
         return NoContent();
     }
