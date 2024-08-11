@@ -179,7 +179,7 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
   return (
     <>
       <TextField
-        label="Search Todo"
+        label="Search TODO"
         value={searchText}
         onChange={handleSearchInputChange}
         variant="outlined"

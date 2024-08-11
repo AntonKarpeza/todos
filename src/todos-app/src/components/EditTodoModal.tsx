@@ -18,6 +18,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
   const [todoTaskName, setTodoTaskName] = useState('');
   const [deadline, setDeadline] = useState<Date | null>(null);
   const { data: task, refetch  } = useGetTodoTaskQuery(todoTaskId);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [updateTodoTask, { isLoading: isUpdating }] = useUpdateTodoTaskMutation();
 
   useEffect(() => {
@@ -30,6 +31,8 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (!isFormValid) return;
 
     try {
       const updatedTodo: TodoTaskViewModel = {
@@ -56,7 +59,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
     >
       <Box className="modal-todo-box">
         <Typography id="modal-title" variant="h6" component="h2">
-          Edit Todo Task
+          Edit TODO
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <TodoForm
@@ -64,12 +67,13 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
             setTodoTaskName={setTodoTaskName}
             deadline={deadline}
             setDeadline={setDeadline}
+            setIsFormValid={setIsFormValid}
           />
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
             <Button onClick={handleClose} variant="outlined" color="secondary">
               Cancel
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={!isFormValid}>
               {isUpdating ? 'Saving...' : 'Save Changes'}
             </Button>
           </Box>

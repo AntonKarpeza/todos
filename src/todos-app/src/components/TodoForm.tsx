@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -10,18 +10,19 @@ interface TodoFormProps {
   setTodoTaskName: (name: string) => void;
   deadline: Date | null;
   setDeadline: (date: Date | null) => void;
+  setIsFormValid: (isValid: boolean) => void;
 }
 
-const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, deadline, setDeadline }) => {
+const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, deadline, setDeadline, setIsFormValid }) => {
   const [nameError, setNameError] = useState<string | null>(null);
   const [deadlineError, setDeadlineError] = useState<string | null>(null);
 
   const validateName = (name: string) => {
     if (name.length < 10) {
-      return "Task name must be at least 10 characters long.";
+      return "TODO must be at least 10 characters long.";
     }
     if (name.length > 450) {
-      return "Task name must not exceed 450 characters.";
+      return "TODO must not exceed 450 characters.";
     }
     return null;
   };
@@ -32,6 +33,13 @@ const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, dead
     }
     return null;
   };
+
+  useEffect(() => {
+    const isNameValid = validateName(todoTaskName) === null;
+    const isDeadlineValid = validateDeadline(deadline) === null;
+
+    setIsFormValid(isNameValid && isDeadlineValid);
+  }, [todoTaskName, deadline, setIsFormValid]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -51,9 +59,10 @@ const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, dead
         value={todoTaskName}
         onChange={handleNameChange}
         fullWidth
+        multiline={true}
         margin="normal"
         required
-        inputProps={{ minLength: 10, maxLength: 450 }}
+        inputProps={{ minLength: 10, maxLength: 500 }}
         error={Boolean(nameError)}
         helperText={nameError}
       />
