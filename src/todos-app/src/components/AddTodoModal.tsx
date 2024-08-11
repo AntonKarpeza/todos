@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addTodo } from '../redux/todosSlice';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
 import TodoForm from './TodoForm';
+import { AlertSeverity } from '../redux/enums/AlertSeverity';
 
 interface AddTodoModalProps {
   isOpen: boolean;
@@ -28,11 +29,11 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       };
 
       await createTodoTask(newTodo).unwrap();
-      dispatch(addTodo("TODO has been successfully added"));
 
+      dispatch(addTodo({message: "TODO has been successfully added", alertSeverity: AlertSeverity.Success}));
       handleClose();
     } catch (err) {
-      console.error('Failed to save the task:', err);
+      dispatch(addTodo({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
     }
   };
 
@@ -43,9 +44,9 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Box sx={{ ...style, width: 400 }}>
+      <Box className="modal-todo-box">
         <Typography id="modal-title" variant="h6" component="h2">
-          Add Todo Task
+          Add TODO
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <TodoForm
@@ -67,17 +68,6 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       </Box>
     </Modal>
   );
-};
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 };
 
 export default AddTodoModal;

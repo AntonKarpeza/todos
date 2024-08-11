@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { TodosState } from '../redux/TodosState'; // Adjust this path and type based on your actual setup
+import { TodosState } from '../redux/interfaces/TodosState';
 
 const TodoSnackbar: React.FC = () => {
-  // Access the showSnackbarMessage state from the Redux store
-  const showSnackbarMessage = useSelector((state: { todos: TodosState }) => state.todos.showSnackbarMessage);
-
+  const todoSnackbarState = useSelector((state: { todos: TodosState }) => state.todos.todoSnackbarState);
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
-  // Trigger Snackbar when showSnackbarMessage changes
   useEffect(() => {
-    if (showSnackbarMessage) {
+    if (todoSnackbarState && todoSnackbarState.message) {
       setOpenSnackBar(true);
     }
-  }, [showSnackbarMessage]);
+  }, [todoSnackbarState]);
 
   const handleSnackBarClose = () => {
     setOpenSnackBar(false);
@@ -23,16 +20,15 @@ const TodoSnackbar: React.FC = () => {
   return (
     <Snackbar
       open={openSnackBar}
-      autoHideDuration={1500}
+      autoHideDuration={2000}
       onClose={handleSnackBarClose}
     >
       <Alert
         onClose={handleSnackBarClose}
-        severity="success"
-        variant="filled"
+        severity={todoSnackbarState.alertSeverity}
         sx={{ width: '100%' }}
       >
-        {showSnackbarMessage}
+        {todoSnackbarState.message}
       </Alert>
     </Snackbar>
   );

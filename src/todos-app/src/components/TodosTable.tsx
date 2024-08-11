@@ -32,7 +32,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { TodosState } from '../redux/TodosState'; // Adjust this path and type based on your actual setup
+import { TodosState } from '../redux/interfaces/TodosState'; // Adjust this path and type based on your actual setup
 import { useSelector } from 'react-redux';
 
 

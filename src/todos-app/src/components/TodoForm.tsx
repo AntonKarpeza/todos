@@ -70,7 +70,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, dead
             helperText={deadlineError}
           />
         )}
-        minDateTime={new Date()} // Prevents selection of dates before the current moment
+        minDateTime={new Date()}
       />
     </LocalizationProvider>
   );

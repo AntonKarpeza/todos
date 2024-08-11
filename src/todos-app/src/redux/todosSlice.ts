@@ -1,18 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TodosState } from './TodosState';
+import { TodosState } from './interfaces/TodosState';
+import { TodoSnackbarState } from './interfaces/TodoSnackbarState';
 
 const initialState: TodosState = {
   refreshData: false,
-  showSnackbarMessage: ""
+  todoSnackbarState: {} as TodoSnackbarState
 };
 
 const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    addTodo: (state, action: PayloadAction<string>) => {
+    addTodo: (state, action: PayloadAction<TodoSnackbarState>) => {
          state.refreshData = !state.refreshData;
-         state.showSnackbarMessage = action.payload;
+         state.todoSnackbarState = action.payload;
     },
   },
 });
