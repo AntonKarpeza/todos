@@ -3,27 +3,30 @@ import { Box, Modal, Typography, Button } from '@mui/material';
 import { useUpdateTodoTaskMutation, useGetTodoTaskQuery } from '../services/todoApi';
 import TodoForm from './TodoForm';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
+import { AlertSeverity } from '../redux/enums/AlertSeverity';
+import { useDispatch } from 'react-redux';
+import { editTodo } from '../redux/todosSlice';
 
 interface EditTodoModalProps {
   isOpen: boolean;
   handleClose: () => void;
   todoTaskId: number;
-  refetch: () => void;
 }
 
-const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todoTaskId, refetch }) => {
-
+const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todoTaskId }) => {
+  const dispatch = useDispatch();
   const [todoTaskName, setTodoTaskName] = useState('');
   const [deadline, setDeadline] = useState<Date | null>(null);
-  const { data: task } = useGetTodoTaskQuery(todoTaskId);
+  const { data: task, refetch  } = useGetTodoTaskQuery(todoTaskId);
   const [updateTodoTask, { isLoading: isUpdating }] = useUpdateTodoTaskMutation();
 
   useEffect(() => {
-    if (task) {
+    if (isOpen && task) {
+      refetch();
       setTodoTaskName(task.todoTaskName);
       setDeadline(task.deadline ? new Date(task.deadline) : null);
     }
-  }, [task]);
+  }, [isOpen, task, refetch]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,15 +35,15 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
       const updatedTodo: TodoTaskViewModel = {
         todoTaskId,
         todoTaskName,
-        deadline: deadline ? deadline.toISOString() : undefined,
-        isDone: task?.isDone || false,
+        deadline: deadline ? deadline.toISOString() : undefined
       };
 
       await updateTodoTask(updatedTodo).unwrap();
+
+      dispatch(editTodo({message: "TODO has been successfully updated", alertSeverity: AlertSeverity.Success}));
       handleClose();
-      refetch();
     } catch (err) {
-      console.error('Failed to update the task:', err);
+      dispatch(editTodo({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
     }
   };
 

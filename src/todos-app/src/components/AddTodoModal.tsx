@@ -14,7 +14,6 @@ interface AddTodoModalProps {
 
 const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
   const dispatch = useDispatch();
-
   const [todoTaskName, setTodoTaskName] = useState('');
   const [deadline, setDeadline] = useState<Date | null>(null);
   const [createTodoTask, { isLoading: isCreating }] = useCreateTodoTaskMutation();
@@ -31,6 +30,8 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       await createTodoTask(newTodo).unwrap();
 
       dispatch(addTodo({message: "TODO has been successfully added", alertSeverity: AlertSeverity.Success}));
+      setTodoTaskName('');
+      setDeadline(null);
       handleClose();
     } catch (err) {
       dispatch(addTodo({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));

@@ -237,7 +237,6 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
           isOpen={isEditTodoModalOpen}
           handleClose={handleCloseEditTodoModal}
           todoTaskId={selectedTodoTaskId}
-          refetch={refetch} // Pass the refetch function to the modal
         />
       )}
 

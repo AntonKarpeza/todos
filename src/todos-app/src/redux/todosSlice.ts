@@ -15,9 +15,13 @@ const todosSlice = createSlice({
          state.refreshData = !state.refreshData;
          state.todoSnackbarState = action.payload;
     },
+    editTodo: (state, action: PayloadAction<TodoSnackbarState>) => {
+      state.refreshData = !state.refreshData;
+      state.todoSnackbarState = action.payload;
+    },
   },
 });
 
-export const { addTodo } = todosSlice.actions;
+export const { addTodo, editTodo } = todosSlice.actions;
 
 export default todosSlice.reducer;

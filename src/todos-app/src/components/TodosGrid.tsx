@@ -153,7 +153,6 @@ const TodosGrid: React.FC<TodosGridProps> = ({ isDone, sortBy, sortDirection, de
           isOpen={isEditTodoModalOpen}
           handleClose={handleCloseEditTodoModal}
           todoTaskId={selectedTodoTaskId} // Pass the selected task ID to the modal
-          refetch={refetch}
         />
       )}
     </>
