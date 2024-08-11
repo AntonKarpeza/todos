@@ -27,6 +27,3 @@ public class GetTodoTasksQueryHandler : IRequestHandler<GetTodoTasksQuery, Pagin
             request.SortDirection);
     }
 }
-
-//dotnet ef migrations add CreateIndex -s ../Todos.API
-// dotnet ef database update -s ../Todos.API

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Tooltip } from '@mui/material';
 import { useToggleIsDoneTodoTaskMutation } from '../services/todoApi';
 import { useDispatch } from 'react-redux';
 import { AlertSeverity } from '../redux/enums/AlertSeverity';
@@ -24,7 +24,11 @@ const ToggleTodo: React.FC<ToggleTodoProps> = ({ todoTaskId, isDone }) => {
     }
   };
 
-  return <Checkbox checked={isDone} onChange={handleToggle} />;
+  return (
+    <Tooltip title={isDone ? "Undo" : "Mark as done"} placement="left">
+        <Checkbox checked={isDone} onChange={handleToggle} />
+    </Tooltip>
+    );
 };
 
 export default ToggleTodo;

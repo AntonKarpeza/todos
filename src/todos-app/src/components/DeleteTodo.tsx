@@ -49,11 +49,11 @@ const DeleteTodo: React.FC<DeleteTodoProps> = ({ todoTaskId }) => {
         >
             <DialogContent>
                 <DialogContentText>
-                    Are you sure you want to remove this TODO?
+                    Are you sure you want to delete this TODO?
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} autoFocus>
+                <Button onClick={handleClose}>
                     No
                 </Button>
                 <Button onClick={handleDelete} autoFocus>

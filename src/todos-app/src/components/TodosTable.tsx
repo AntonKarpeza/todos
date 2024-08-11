@@ -26,12 +26,10 @@ import SearchTodos from './SearchTodos';
 
 interface TodosTableProps {
   isDone?: boolean;
-  sortBy?: string;
-  sortDirection?: string;
   deadlineTo?: Date;
 }
 
-const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, deadlineTo }) => {
+const TodosTable: React.FC<TodosTableProps> = ({ isDone, deadlineTo }) => {
   const refreshData = useSelector((state: { todos: TodosState }) => state.todos.refreshData);
   const [searchText, setSearchText] = useState<string>('');
   const [isEditTodoModalOpen, setIsEditTodoModalOpen] = useState(false);
@@ -47,10 +45,10 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
     pageSize: paginationModel.pageSize,
     isDone: isDone,
     deadlineFrom: undefined,
-    deadlineTo: deadlineTo ? deadlineTo.toISOString() : undefined,
+    deadlineTo: deadlineTo ? new Date(deadlineTo.getTime() - (deadlineTo.getTimezoneOffset() * 60000)).toISOString() : undefined,
     todoTaskName: searchText,
-    sortBy: sortBy ? sortBy : 'TodoTaskId',
-    sortDirection: sortDirection,
+    sortBy: undefined,
+    sortDirection: undefined,
   };
 
   const { data: todos = { items: [], totalPages: 0, totalCount: 0 }, isLoading, refetch } = useGetTodoTasksQuery(filter);
@@ -90,46 +88,47 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
     <>
       <SearchTodos onSearch={handleSearch} />
       {isLoading && <LinearProgress />}
-      <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-        <Table stickyHeader aria-label="todos table" size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>Todo</TableCell>
-              <TableCell align="center">Deadline</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {todos.items.map((todo) => (
-              <TableRow 
-                key={todo.todoTaskId}
-                className={`${!todo.isDone && todo.deadline && new Date(todo.deadline) <= new Date() ? 'expired-row' : 'normal-row'}`}
-              >
-                <TableCell padding="checkbox">
-                  <ToggleTodo
-                      todoTaskId={todo.todoTaskId}
-                      isDone={todo.isDone}
-                    />
-                </TableCell>
-                <TableCell>{todo.todoTaskName}</TableCell>
-                <TableCell align="center" style={{ width: 120 }}>
-                  {todo.deadline ? format(new Date(todo.deadline), 'Pp', { locale: de }) : 'No'}
-                </TableCell>
-                <TableCell style={{ width: 80 }}>
-                  <Tooltip title="Edit TODO">
-                    <IconButton color="primary" onClick={() => handleOpenEditTodoModal(todo.todoTaskId)}>
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <DeleteTodo todoTaskId={todo.todoTaskId}/>
-                </TableCell>
+      <Paper elevation={8}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="todos table" size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>Todo</TableCell>
+                <TableCell align="center">Deadline</TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
+            </TableHead>
+            <TableBody>
+              {todos.items.map((todo) => (
+                <TableRow 
+                  key={todo.todoTaskId}
+                  className={`${!todo.isDone && todo.deadline && new Date(todo.deadline) <= new Date() ? 'expired-row' : 'normal-row'}`}
+                >
+                  <TableCell padding="checkbox">
+                    <ToggleTodo
+                        todoTaskId={todo.todoTaskId}
+                        isDone={todo.isDone}
+                      />
+                  </TableCell>
+                  <TableCell>{todo.todoTaskName}</TableCell>
+                  <TableCell align="center" style={{ width: 120 }}>
+                    {todo.deadline ? format(new Date(todo.deadline), 'Pp', { locale: de }) : 'No'}
+                  </TableCell>
+                  <TableCell style={{ width: 80 }}>
+                    <Tooltip title="Edit TODO">
+                      <IconButton color="primary" onClick={() => handleOpenEditTodoModal(todo.todoTaskId)}>
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <DeleteTodo todoTaskId={todo.todoTaskId}/>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       <TablePagination
         rowsPerPageOptions={[5, 10, 15]}
         component="div"

@@ -48,7 +48,7 @@ public class TodoTaskRepository : ITodoTaskRepository
 
         if (!string.IsNullOrEmpty(sortBy))
         {
-            var direction = sortDirection?.ToLower() == "asc" ? "ascending" : "descending";
+            var direction = sortDirection?.ToLower() == "desc" ? "descending" : "ascending";
             query = query.OrderBy($"{sortBy} {direction}");
         }
 

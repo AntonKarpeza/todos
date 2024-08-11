@@ -27,7 +27,7 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
     try {
       const newTodo: TodoTaskViewModel = {
         todoTaskName,
-        deadline: deadline ? deadline.toISOString() : undefined,
+        deadline: deadline ? new Date(deadline.getTime() - (deadline.getTimezoneOffset() * 60000)).toISOString() : undefined,
       };
 
       await createTodoTask(newTodo).unwrap();

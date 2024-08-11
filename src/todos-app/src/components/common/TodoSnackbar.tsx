@@ -20,7 +20,7 @@ const TodoSnackbar: React.FC = () => {
   return (
     <Snackbar
       open={openSnackBar}
-      autoHideDuration={2000}
+      autoHideDuration={2500}
       onClose={handleSnackBarClose}
     >
       <Alert

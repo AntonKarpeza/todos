@@ -38,7 +38,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
       const updatedTodo: TodoTaskViewModel = {
         todoTaskId,
         todoTaskName,
-        deadline: deadline ? deadline.toISOString() : undefined
+        deadline: deadline ? new Date(deadline.getTime() - (deadline.getTimezoneOffset() * 60000)).toISOString() : undefined
       };
 
       await updateTodoTask(updatedTodo).unwrap();

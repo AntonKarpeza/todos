@@ -50,10 +50,10 @@ const TodosContent: React.FC = () => {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <TodosTable sortBy="TodoTaskId"/>
+          <TodosTable/>
         </TabPanel>
         <TabPanel value="2">
-          <TodosTable isDone={false} sortBy="TodoTaskId"/>
+          <TodosTable isDone={false}/>
         </TabPanel>
         <TabPanel value="3">
           <TodosTable isDone={false} deadlineTo={new Date()}/>
