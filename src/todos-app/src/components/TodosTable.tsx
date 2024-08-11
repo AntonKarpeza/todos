@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   useGetTodoTasksQuery,
-  useToggleIsDoneTodoTaskMutation,
   useDeleteTodoTaskMutation,
 } from '../services/todoApi';
 import {
   Button,
-  Checkbox,
   Table,
   TableBody,
   TableCell,

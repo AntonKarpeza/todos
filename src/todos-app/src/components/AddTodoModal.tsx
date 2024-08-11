@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Modal, Button, Typography } from '@mui/material';
 import { useCreateTodoTaskMutation } from '../services/todoApi';
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../redux/todosSlice';
+import { addTodo, errorCaught } from '../redux/todosSlice';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
 import TodoForm from './TodoForm';
 import { AlertSeverity } from '../redux/enums/AlertSeverity';
@@ -36,7 +36,7 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
       cleanTodoForm();
       handleClose();
     } catch (err) {
-      dispatch(addTodo({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
+      dispatch(errorCaught({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
     }
   };
 

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TodosState } from './interfaces/TodosState';
 import { TodoSnackbarState } from './interfaces/TodoSnackbarState';
-import { AlertSeverity } from './enums/AlertSeverity';
 
 const initialState: TodosState = {
   refreshData: false,
@@ -14,25 +13,26 @@ const todosSlice = createSlice({
   reducers: {
     addTodo: (state, action: PayloadAction<TodoSnackbarState>) => {
       state.todoSnackbarState = action.payload;
-      if(state.todoSnackbarState.alertSeverity === AlertSeverity.Success){
-        state.refreshData = !state.refreshData;
-      }
+      state.refreshData = !state.refreshData;
     },
     editTodo: (state, action: PayloadAction<TodoSnackbarState>) => {
       state.todoSnackbarState = action.payload;
-      if(state.todoSnackbarState.alertSeverity === AlertSeverity.Success){
-        state.refreshData = !state.refreshData;
-      }
+      state.refreshData = !state.refreshData;
+    },
+    deleteTodo: (state, action: PayloadAction<TodoSnackbarState>) => {
+      state.todoSnackbarState = action.payload;
+      state.refreshData = !state.refreshData;
     },
     toggleIsDone: (state, action: PayloadAction<TodoSnackbarState>) => {
       state.todoSnackbarState = action.payload;
-      if(state.todoSnackbarState.alertSeverity === AlertSeverity.Success){
-        state.refreshData = !state.refreshData;
-      }
+      state.refreshData = !state.refreshData;
     },
+    errorCaught: (state, action: PayloadAction<TodoSnackbarState>) =>{
+      state.todoSnackbarState = action.payload;
+    }
   },
 });
 
-export const { addTodo, editTodo, toggleIsDone } = todosSlice.actions;
+export const { addTodo, editTodo, toggleIsDone, errorCaught } = todosSlice.actions;
 
 export default todosSlice.reducer;

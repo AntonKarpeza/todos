@@ -3,7 +3,7 @@ import { Checkbox } from '@mui/material';
 import { useToggleIsDoneTodoTaskMutation } from '../services/todoApi';
 import { useDispatch } from 'react-redux';
 import { AlertSeverity } from '../redux/enums/AlertSeverity';
-import { toggleIsDone } from '../redux/todosSlice';
+import { toggleIsDone, errorCaught } from '../redux/todosSlice';
 
 interface ToggleTodoProps {
   todoTaskId?: number;
@@ -20,7 +20,7 @@ const ToggleTodo: React.FC<ToggleTodoProps> = ({ todoTaskId, isDone }) => {
       await toggleIsDoneTodoTask(todoTaskId).unwrap();
       dispatch(toggleIsDone({ message: 'TODO has been successfully changed', alertSeverity: AlertSeverity.Success }));
     } catch (err) {
-      dispatch(toggleIsDone({ message: 'Failed to change TODO', alertSeverity: AlertSeverity.Error }));
+      dispatch(errorCaught({ message: 'Failed to change TODO', alertSeverity: AlertSeverity.Error }));
     }
   };
 

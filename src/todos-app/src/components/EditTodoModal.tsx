@@ -5,7 +5,7 @@ import TodoForm from './TodoForm';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
 import { AlertSeverity } from '../redux/enums/AlertSeverity';
 import { useDispatch } from 'react-redux';
-import { editTodo } from '../redux/todosSlice';
+import { editTodo, errorCaught } from '../redux/todosSlice';
 
 interface EditTodoModalProps {
   isOpen: boolean;
@@ -46,7 +46,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
       dispatch(editTodo({message: "TODO has been successfully updated", alertSeverity: AlertSeverity.Success}));
       handleClose();
     } catch (err) {
-      dispatch(editTodo({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
+      dispatch(errorCaught({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
     }
   };
 
