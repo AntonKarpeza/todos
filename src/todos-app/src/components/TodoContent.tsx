@@ -6,7 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Tab, Grid, Container } from '@mui/material';
 import TodosTable from './TodosTable';
-import TodoSnackbar from './TodoSnackbar';
+import TodoSnackbar from './common/TodoSnackbar';
 
 
 

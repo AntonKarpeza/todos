@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { TodosState } from '../redux/interfaces/TodosState';
+import { TodosState } from '../../redux/interfaces/TodosState';
 
 const TodoSnackbar: React.FC = () => {
   const todoSnackbarState = useSelector((state: { todos: TodosState }) => state.todos.todoSnackbarState);
