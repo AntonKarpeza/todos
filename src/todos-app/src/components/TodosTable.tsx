@@ -32,10 +32,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { TodosState } from '../redux/interfaces/TodosState'; // Adjust this path and type based on your actual setup
+import { TodosState } from '../redux/interfaces/TodosState';
 import { useSelector } from 'react-redux';
-
-
+import { useDispatch } from 'react-redux';
+import ToggleTodo from './ToggleTodo'; 
 
 
 
@@ -47,7 +47,7 @@ interface TodosTableProps {
 }
 
 const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, deadlineTo }) => {
-
+  const dispatch = useDispatch();
   const refreshData = useSelector((state: { todos: TodosState }) => state.todos.refreshData);
 
 
@@ -99,23 +99,12 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
 
   const { data: todos = { items: [], totalPages: 0, totalCount: 0 }, error, isLoading, refetch } =
     useGetTodoTasksQuery(filter);
-  const [toggleIsDoneTodoTask] = useToggleIsDoneTodoTaskMutation();
   const [deleteTodoTask] = useDeleteTodoTaskMutation();
 
   useEffect(() => {
     refetch();
   }, [refetch, refreshData]);
 
-  const handleToggle = async (id?: number) => {
-    if (!id) return;
-    try {
-      await toggleIsDoneTodoTask(id).unwrap();
-      setOpenSnackBar(true);
-      refetch();
-    } catch (err) {
-      console.error('Failed to toggle todo', err);
-    }
-  };
 
   const handleDeleteConfirm = async (id?: number) => {
     if (!id) return;
@@ -200,7 +189,10 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
             {todos.items.map((todo) => (
               <TableRow hover key={todo.todoTaskId}>
                 <TableCell padding="checkbox">
-                  <Checkbox checked={todo.isDone} onChange={() => handleToggle(todo.todoTaskId)} />
+                  <ToggleTodo
+                      todoTaskId={todo.todoTaskId}
+                      isDone={todo.isDone}
+                    />
                 </TableCell>
                 <TableCell>{todo.todoTaskName}</TableCell>
                 <TableCell>
@@ -286,3 +278,4 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
 };
 
 export default TodosTable;
+

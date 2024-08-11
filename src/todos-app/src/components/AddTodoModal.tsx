@@ -30,8 +30,6 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
         deadline: deadline ? deadline.toISOString() : undefined,
       };
 
-      console.log(newTodo);
-
       await createTodoTask(newTodo).unwrap();
 
       dispatch(addTodo({message: "TODO has been successfully added", alertSeverity: AlertSeverity.Success}));
