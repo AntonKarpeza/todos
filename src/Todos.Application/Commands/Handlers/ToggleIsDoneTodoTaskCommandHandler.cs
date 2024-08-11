@@ -14,7 +14,7 @@ public class ToggleIsDoneTodoTaskCommandHandler : IRequestHandler<ToggleIsDoneTo
 
     public async Task<Unit> Handle(ToggleIsDoneTodoTaskCommand request, CancellationToken cancellationToken)
     {
-        if (request.TodoTaskId == 0)
+        if (request.TodoTaskId <= 0)
         {
             throw new ArgumentException("Invalid Task ID");
         }
@@ -24,6 +24,11 @@ public class ToggleIsDoneTodoTaskCommandHandler : IRequestHandler<ToggleIsDoneTo
         if (existingTask == null)
         {
             throw new Exception($"TodoTask with ID {request.TodoTaskId} not found.");
+        }
+
+        if (existingTask.DeletedDate != null)
+        {
+            throw new Exception($"TodoTask with ID {request.TodoTaskId} has already deleted.");
         }
 
         existingTask.IsDone = !existingTask.IsDone;

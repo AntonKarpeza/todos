@@ -15,11 +15,18 @@ public class GetTodoTaskByIdQueryHandler : IRequestHandler<GetTodoTaskByIdQuery,
 
     public async Task<TodoTask?> Handle(GetTodoTaskByIdQuery request, CancellationToken cancellationToken)
     {
-        if (request.TodoTaskId == 0)
+        if (request.TodoTaskId <= 0)
         {
             throw new ArgumentException("Invalid Task ID");
         }
 
-        return await _repository.GetByIdAsync(request.TodoTaskId);
+        var todoTask = await _repository.GetByIdAsync(request.TodoTaskId);
+
+        if (todoTask != null && todoTask.DeletedDate != null)
+        {
+            throw new Exception($"TodoTask with ID {request.TodoTaskId} has already deleted.");
+        }
+
+        return todoTask;
     }
 }

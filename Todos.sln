@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todos.Infrastructure", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8687CEFB-5520-44A3-97C3-357513285736}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todos.Infrastructure.Tests", "tests\Todos.Infrastructure.Tests\Todos.Infrastructure.Tests.csproj", "{F5644A1B-EC52-41AA-84B7-AA1AE073BEC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todos.Application.Tests", "tests\Todos.Infrastructure.Tests\Todos.Application.Tests.csproj", "{F5644A1B-EC52-41AA-84B7-AA1AE073BEC2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{036072FB-F448-45FD-99D8-F41CDFA90677}"
 EndProject

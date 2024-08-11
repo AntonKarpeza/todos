@@ -18,7 +18,7 @@ public class UpdateTodoTaskCommandHandler : IRequestHandler<UpdateTodoTaskComman
 
     public async Task<Unit> Handle(UpdateTodoTaskCommand request, CancellationToken cancellationToken)
     {
-        if (request.TodoTaskId == 0)
+        if (request.TodoTaskId <= 0)
         {
             throw new ArgumentException("Invalid Task ID");
         }
@@ -28,6 +28,11 @@ public class UpdateTodoTaskCommandHandler : IRequestHandler<UpdateTodoTaskComman
         if (existingTask == null)
         {
             throw new Exception($"TodoTask with ID {request.TodoTaskId} not found.");
+        }
+
+        if (existingTask.DeletedDate != null)
+        {
+            throw new Exception($"TodoTask with ID {request.TodoTaskId} has already deleted.");
         }
 
         existingTask.Deadline = request.Deadline;

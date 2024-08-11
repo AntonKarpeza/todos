@@ -14,11 +14,21 @@ public class DeleteTodoTaskCommandHandler : IRequestHandler<DeleteTodoTaskComman
 
     public async Task<Unit> Handle(DeleteTodoTaskCommand request, CancellationToken cancellationToken)
     {
+        if (request.TodoTaskId <= 0)
+        {
+            throw new ArgumentException("Invalid Task ID");
+        }
+
         var existingTask = await _repository.GetByIdAsync(request.TodoTaskId);
 
         if (existingTask == null)
         {
             throw new Exception($"TodoTask with ID {request.TodoTaskId} not found.");
+        }
+
+        if (existingTask.DeletedDate != null)
+        {
+            throw new Exception($"TodoTask with ID {request.TodoTaskId} has already deleted.");
         }
 
         existingTask.DeletedDate = DateTime.Now;
