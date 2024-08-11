@@ -12,7 +12,6 @@ import {
   TablePagination,
   TableRow,
   Paper,
-  TextField,
   LinearProgress,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,14 +19,11 @@ import { FilterTodoTasksViewModel } from '../interfaces/FilterTodoTasksViewModel
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import EditTodoModal from './EditTodoModal';
-
 import { TodosState } from '../redux/interfaces/TodosState';
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
 import ToggleTodo from './ToggleTodo'; 
 import DeleteTodo from './DeleteTodo';
-
-
+import SearchTodos from './SearchTodos';
 
 interface TodosTableProps {
   isDone?: boolean;
@@ -38,41 +34,14 @@ interface TodosTableProps {
 
 const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, deadlineTo }) => {
   const refreshData = useSelector((state: { todos: TodosState }) => state.todos.refreshData);
-
-
+  const [searchText, setSearchText] = useState<string>('');
   const [isEditTodoModalOpen, setIsEditTodoModalOpen] = useState(false);
   const [selectedTodoTaskId, setSelectedTodoTaskId] = useState<number | null>(null);
-  const [isTyping, setIsTyping] = useState<boolean>(false);
-
-  const handleOpenEditTodoModal = (todoTaskId?: number) => {
-    if (!todoTaskId) return;
-    setSelectedTodoTaskId(todoTaskId);
-    setIsEditTodoModalOpen(true);
-  };
-
-  const handleCloseEditTodoModal = () => {
-    setSelectedTodoTaskId(null);
-    setIsEditTodoModalOpen(false);
-  };
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
   });
-
-  const [searchText, setSearchText] = useState<string>('');
-  const [debouncedSearchText, setDebouncedSearchText] = useState<string>('');
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchText(searchText);
-      setIsTyping(false); // Stop typing after debounce
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchText]);
 
   const filter: FilterTodoTasksViewModel = {
     pageNumber: paginationModel.page + 1,
@@ -80,18 +49,16 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
     isDone: isDone,
     deadlineFrom: undefined,
     deadlineTo: deadlineTo ? deadlineTo.toISOString() : undefined,
-    todoTaskName: debouncedSearchText,
+    todoTaskName: searchText,
     sortBy: sortBy ? sortBy : 'TodoTaskId',
     sortDirection: sortDirection,
   };
 
-  const { data: todos = { items: [], totalPages: 0, totalCount: 0 }, error, isLoading, refetch } =
-    useGetTodoTasksQuery(filter);
+  const { data: todos = { items: [], totalPages: 0, totalCount: 0 }, isLoading, refetch } = useGetTodoTasksQuery(filter);
 
   useEffect(() => {
     refetch();
   }, [refetch, refreshData]);
-
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPaginationModel((prev) => ({ ...prev, page: newPage }));
@@ -105,22 +72,25 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
     }));
   };
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
-    setIsTyping(true); // Start typing
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+  };
+
+  const handleOpenEditTodoModal = (todoTaskId?: number) => {
+    if (!todoTaskId) return;
+    setSelectedTodoTaskId(todoTaskId);
+    setIsEditTodoModalOpen(true);
+  };
+
+  const handleCloseEditTodoModal = () => {
+    setSelectedTodoTaskId(null);
+    setIsEditTodoModalOpen(false);
   };
 
   return (
     <>
-      <TextField
-        label="Search TODO"
-        value={searchText}
-        onChange={handleSearchInputChange}
-        variant="outlined"
-        fullWidth
-        margin="normal"
-      />
-      {(isTyping || isLoading) && <LinearProgress/>}
+      <SearchTodos onSearch={handleSearch} />
+      {isLoading && <LinearProgress />}
       <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
         <Table stickyHeader aria-label="todos table">
           <TableHead>
@@ -178,4 +148,3 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, sortBy, sortDirection, 
 };
 
 export default TodosTable;
-

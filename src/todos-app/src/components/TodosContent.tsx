@@ -8,13 +8,7 @@ import { Box, Button, Tab, Grid, Container } from '@mui/material';
 import TodosTable from './TodosTable';
 import TodoSnackbar from './common/TodoSnackbar';
 
-
-
-
-
-
-
-const TodoContent: React.FC = () => {
+const TodosContent: React.FC = () => {
   const [value, setValue] = React.useState('1');
   const [isAddTodoModalOpen, setIsAddTodoModalOpen] = useState(false);
 
@@ -29,11 +23,6 @@ const TodoContent: React.FC = () => {
   const handleCloseAddTodoModal = () => {
     setIsAddTodoModalOpen(false);
   };
-
-
-  
-
- 
 
   return (
     <Container>
@@ -72,18 +61,13 @@ const TodoContent: React.FC = () => {
         </TabPanel>
       </TabContext>
 
-
       <AddTodoModal
         isOpen={isAddTodoModalOpen}
         handleClose={handleCloseAddTodoModal}
       />
-
       <TodoSnackbar/>
-
-
-
     </Container>
   );
 };
 
-export default TodoContent;
+export default TodosContent;
