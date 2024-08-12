@@ -12,6 +12,7 @@ import {
   Paper,
   LinearProgress,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { FilterTodoTasksViewModel } from "../interfaces/FilterTodoTasksViewModel";
@@ -23,6 +24,9 @@ import { useSelector } from "react-redux";
 import ToggleTodo from "./ToggleTodo";
 import DeleteTodo from "./DeleteTodo";
 import SearchTodos from "./SearchTodos";
+import { useDispatch } from "react-redux";
+import { AlertSeverity } from "../redux/enums/AlertSeverity";
+import { errorCaught } from "../redux/todosSlice";
 
 interface TodosTableProps {
   isDone?: boolean;
@@ -30,6 +34,7 @@ interface TodosTableProps {
 }
 
 const TodosTable: React.FC<TodosTableProps> = ({ isDone, deadlineTo }) => {
+  const dispatch = useDispatch();
   const refreshData = useSelector(
     (state: { todos: TodosState }) => state.todos.refreshData,
   );
@@ -63,11 +68,24 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, deadlineTo }) => {
     data: todos = { items: [], totalPages: 0, totalCount: 0 },
     isLoading,
     refetch,
+    error: queryError,
   } = useGetTodoTasksQuery(filter);
 
   useEffect(() => {
-    refetch();
-  }, [refetch, refreshData]);
+    try {
+      if (queryError) {
+        throw new Error("Failed to fetch data");
+      }
+      refetch();
+    } catch (err) {
+      dispatch(
+        errorCaught({
+          message: "Failed to fetch TODOs",
+          alertSeverity: AlertSeverity.Error,
+        }),
+      );
+    }
+  }, [queryError, refetch, refreshData]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPaginationModel((prev) => ({ ...prev, page: newPage }));
@@ -114,36 +132,54 @@ const TodosTable: React.FC<TodosTableProps> = ({ isDone, deadlineTo }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {todos.items.map((todo) => (
-                <TableRow
-                  key={todo.todoTaskId}
-                  className={`${!todo.isDone && todo.deadline && new Date(todo.deadline) <= new Date() ? "expired-row" : "normal-row"}`}
-                >
-                  <TableCell padding="checkbox">
-                    <ToggleTodo
-                      todoTaskId={todo.todoTaskId}
-                      isDone={todo.isDone}
-                    />
-                  </TableCell>
-                  <TableCell>{todo.todoTaskName}</TableCell>
-                  <TableCell align="center" style={{ width: 120 }}>
-                    {todo.deadline
-                      ? format(new Date(todo.deadline), "Pp", { locale: de })
-                      : "No"}
-                  </TableCell>
-                  <TableCell style={{ width: 80 }}>
-                    <Tooltip title="Edit TODO">
-                      <IconButton
-                        color="primary"
-                        onClick={() => handleOpenEditTodoModal(todo.todoTaskId)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <DeleteTodo todoTaskId={todo.todoTaskId} />
+              {todos.items.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <Typography align="center" color="textSecondary">
+                      No data available
+                    </Typography>
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                todos.items.map((todo) => (
+                  <TableRow
+                    key={todo.todoTaskId}
+                    className={`${
+                      !todo.isDone &&
+                      todo.deadline &&
+                      new Date(todo.deadline) <= new Date()
+                        ? "expired-row"
+                        : "normal-row"
+                    }`}
+                  >
+                    <TableCell padding="checkbox">
+                      <ToggleTodo
+                        todoTaskId={todo.todoTaskId}
+                        isDone={todo.isDone}
+                      />
+                    </TableCell>
+                    <TableCell>{todo.todoTaskName}</TableCell>
+                    <TableCell align="center" style={{ width: 120 }}>
+                      {todo.deadline
+                        ? format(new Date(todo.deadline), "Pp", { locale: de })
+                        : "No"}
+                    </TableCell>
+                    <TableCell style={{ width: 80 }}>
+                      <Tooltip title="Edit TODO">
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            handleOpenEditTodoModal(todo.todoTaskId)
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <DeleteTodo todoTaskId={todo.todoTaskId} />
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
