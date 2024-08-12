@@ -2,7 +2,7 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      SA_PASSWORD: "Your_password123"
+      SA_PASSWORD: ""
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
@@ -16,7 +16,6 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=TodoDb;User=sa;Password=Your_password123;TrustServerCertificate=True;
       - ASPNETCORE_URLS=http://+:80
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
