@@ -1,6 +1,7 @@
-import { merge } from "webpack-merge";
-import common from "./webpack.common.js";
-import path from "path";
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.js");
+const path = require("path");
 
 module.exports = merge(common, {
   mode: "development",
