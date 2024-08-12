@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { TextField } from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { de } from 'date-fns/locale';
+import React, { useState, useEffect } from "react";
+import { TextField } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { de } from "date-fns/locale";
 
 interface TodoFormProps {
   todoTaskName: string;
@@ -13,7 +13,13 @@ interface TodoFormProps {
   setIsFormValid: (isValid: boolean) => void;
 }
 
-const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, deadline, setDeadline, setIsFormValid }) => {
+const TodoForm: React.FC<TodoFormProps> = ({
+  todoTaskName,
+  setTodoTaskName,
+  deadline,
+  setDeadline,
+  setIsFormValid,
+}) => {
   const [nameError, setNameError] = useState<string | null>(null);
   const [deadlineError, setDeadlineError] = useState<string | null>(null);
 
@@ -71,10 +77,10 @@ const TodoForm: React.FC<TodoFormProps> = ({ todoTaskName, setTodoTaskName, dead
         value={deadline}
         onChange={handleDeadlineChange}
         renderInput={(params) => (
-          <TextField 
-            {...params} 
-            fullWidth 
-            margin="normal" 
+          <TextField
+            {...params}
+            fullWidth
+            margin="normal"
             error={Boolean(deadlineError)}
             helperText={deadlineError}
           />

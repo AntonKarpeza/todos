@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Box, Modal, Button, Typography } from '@mui/material';
-import { useCreateTodoTaskMutation } from '../services/todoApi';
-import { useDispatch } from 'react-redux';
-import { addTodo, errorCaught } from '../redux/todosSlice';
-import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
-import TodoForm from './TodoForm';
-import { AlertSeverity } from '../redux/enums/AlertSeverity';
+import React, { useState } from "react";
+import { Box, Modal, Button, Typography } from "@mui/material";
+import { useCreateTodoTaskMutation } from "../services/todoApi";
+import { useDispatch } from "react-redux";
+import { addTodo, errorCaught } from "../redux/todosSlice";
+import { TodoTaskViewModel } from "../interfaces/TodoTaskViewModel";
+import TodoForm from "./TodoForm";
+import { AlertSeverity } from "../redux/enums/AlertSeverity";
 
 interface AddTodoModalProps {
   isOpen: boolean;
@@ -14,10 +14,11 @@ interface AddTodoModalProps {
 
 const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
   const dispatch = useDispatch();
-  const [todoTaskName, setTodoTaskName] = useState('');
+  const [todoTaskName, setTodoTaskName] = useState("");
   const [deadline, setDeadline] = useState<Date | null>(null);
-  const [createTodoTask, { isLoading: isCreating }] = useCreateTodoTaskMutation();
-  const [isFormValid, setIsFormValid] = useState(false); 
+  const [createTodoTask, { isLoading: isCreating }] =
+    useCreateTodoTaskMutation();
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,23 +28,37 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
     try {
       const newTodo: TodoTaskViewModel = {
         todoTaskName,
-        deadline: deadline ? new Date(deadline.getTime() - (deadline.getTimezoneOffset() * 60000)).toISOString() : undefined,
+        deadline: deadline
+          ? new Date(
+              deadline.getTime() - deadline.getTimezoneOffset() * 60000,
+            ).toISOString()
+          : undefined,
       };
 
       await createTodoTask(newTodo).unwrap();
 
-      dispatch(addTodo({message: "TODO has been successfully added", alertSeverity: AlertSeverity.Success}));
+      dispatch(
+        addTodo({
+          message: "TODO has been successfully added",
+          alertSeverity: AlertSeverity.Success,
+        }),
+      );
       cleanTodoForm();
       handleClose();
     } catch (err) {
-      dispatch(errorCaught({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
+      dispatch(
+        errorCaught({
+          message: "Failed to save TODO",
+          alertSeverity: AlertSeverity.Error,
+        }),
+      );
     }
   };
 
   const cleanTodoForm = () => {
-    setTodoTaskName('');
+    setTodoTaskName("");
     setDeadline(null);
-  }
+  };
 
   return (
     <Modal
@@ -64,12 +79,17 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({ isOpen, handleClose }) => {
             setDeadline={setDeadline}
             setIsFormValid={setIsFormValid}
           />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button onClick={handleClose} variant="outlined">
               Cancel
             </Button>
-            <Button type="submit" variant="contained" color="primary" disabled={!isFormValid}>
-              {isCreating ? 'Saving...' : 'Add Todo'}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!isFormValid}
+            >
+              {isCreating ? "Saving..." : "Add Todo"}
             </Button>
           </Box>
         </Box>

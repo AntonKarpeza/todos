@@ -1,6 +1,6 @@
-import { TodoSnackbarState } from './TodoSnackbarState'
+import { TodoSnackbarState } from "./TodoSnackbarState";
 
 export interface TodosState {
-    refreshData: boolean;
-    todoSnackbarState: TodoSnackbarState;
+  refreshData: boolean;
+  todoSnackbarState: TodoSnackbarState;
 }

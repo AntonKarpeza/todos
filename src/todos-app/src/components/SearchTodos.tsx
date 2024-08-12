@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, LinearProgress, InputAdornment } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState, useEffect } from "react";
+import { TextField, LinearProgress, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface SearchTodoProps {
   onSearch: (searchText: string) => void;
 }
 
 const SearchTodo: React.FC<SearchTodoProps> = ({ onSearch }) => {
-  const [searchText, setSearchText] = useState<string>('');
-  const [debouncedSearchText, setDebouncedSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,31 +26,31 @@ const SearchTodo: React.FC<SearchTodoProps> = ({ onSearch }) => {
     onSearch(debouncedSearchText);
   }, [debouncedSearchText, onSearch]);
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchText(event.target.value);
     setIsTyping(true);
   };
 
   return (
     <>
-        {/* <Paper elevation={3} > */}
-            <TextField
-                label="Search TODO"
-                value={searchText}
-                onChange={handleSearchInputChange}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-            />
-        {/* </Paper> */}
-        {isTyping && <LinearProgress />}
+      <TextField
+        label="Search TODO"
+        value={searchText}
+        onChange={handleSearchInputChange}
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+      {isTyping && <LinearProgress />}
     </>
   );
 };

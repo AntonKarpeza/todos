@@ -1,6 +1,6 @@
-import { AlertSeverity } from '../enums/AlertSeverity'
+import { AlertSeverity } from "../enums/AlertSeverity";
 
 export interface TodoSnackbarState {
-    message: string;
-    alertSeverity: AlertSeverity;
+  message: string;
+  alertSeverity: AlertSeverity;
 }

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Modal, Typography, Button } from '@mui/material';
-import { useUpdateTodoTaskMutation, useGetTodoTaskQuery } from '../services/todoApi';
-import TodoForm from './TodoForm';
-import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
-import { AlertSeverity } from '../redux/enums/AlertSeverity';
-import { useDispatch } from 'react-redux';
-import { editTodo, errorCaught } from '../redux/todosSlice';
+import React, { useEffect, useState } from "react";
+import { Box, Modal, Typography, Button } from "@mui/material";
+import {
+  useUpdateTodoTaskMutation,
+  useGetTodoTaskQuery,
+} from "../services/todoApi";
+import TodoForm from "./TodoForm";
+import { TodoTaskViewModel } from "../interfaces/TodoTaskViewModel";
+import { AlertSeverity } from "../redux/enums/AlertSeverity";
+import { useDispatch } from "react-redux";
+import { editTodo, errorCaught } from "../redux/todosSlice";
 
 interface EditTodoModalProps {
   isOpen: boolean;
@@ -13,13 +16,18 @@ interface EditTodoModalProps {
   todoTaskId: number;
 }
 
-const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todoTaskId }) => {
+const EditTodoModal: React.FC<EditTodoModalProps> = ({
+  isOpen,
+  handleClose,
+  todoTaskId,
+}) => {
   const dispatch = useDispatch();
-  const [todoTaskName, setTodoTaskName] = useState('');
+  const [todoTaskName, setTodoTaskName] = useState("");
   const [deadline, setDeadline] = useState<Date | null>(null);
-  const { data: task, refetch  } = useGetTodoTaskQuery(todoTaskId);
+  const { data: task, refetch } = useGetTodoTaskQuery(todoTaskId);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [updateTodoTask, { isLoading: isUpdating }] = useUpdateTodoTaskMutation();
+  const [updateTodoTask, { isLoading: isUpdating }] =
+    useUpdateTodoTaskMutation();
 
   useEffect(() => {
     if (isOpen && task) {
@@ -38,15 +46,29 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
       const updatedTodo: TodoTaskViewModel = {
         todoTaskId,
         todoTaskName,
-        deadline: deadline ? new Date(deadline.getTime() - (deadline.getTimezoneOffset() * 60000)).toISOString() : undefined
+        deadline: deadline
+          ? new Date(
+              deadline.getTime() - deadline.getTimezoneOffset() * 60000,
+            ).toISOString()
+          : undefined,
       };
 
       await updateTodoTask(updatedTodo).unwrap();
 
-      dispatch(editTodo({message: "TODO has been successfully updated", alertSeverity: AlertSeverity.Success}));
+      dispatch(
+        editTodo({
+          message: "TODO has been successfully updated",
+          alertSeverity: AlertSeverity.Success,
+        }),
+      );
       handleClose();
     } catch (err) {
-      dispatch(errorCaught({message: "Failed to save TODO", alertSeverity: AlertSeverity.Error}));
+      dispatch(
+        errorCaught({
+          message: "Failed to save TODO",
+          alertSeverity: AlertSeverity.Error,
+        }),
+      );
     }
   };
 
@@ -69,12 +91,17 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({ isOpen, handleClose, todo
             setDeadline={setDeadline}
             setIsFormValid={setIsFormValid}
           />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button onClick={handleClose} variant="outlined">
               Cancel
             </Button>
-            <Button type="submit" variant="contained" color="primary" disabled={!isFormValid}>
-              {isUpdating ? 'Saving...' : 'Save Changes'}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!isFormValid}
+            >
+              {isUpdating ? "Saving..." : "Save Changes"}
             </Button>
           </Box>
         </Box>

@@ -1,6 +1,6 @@
-import React from 'react';
-import Header from '../../components/layouts/Header';
-import Footer from '../../components/layouts/Footer';
+import React from "react";
+import Header from "../../components/layouts/Header";
+import Footer from "../../components/layouts/Footer";
 
 interface BaseLayoutProps {
   children: React.ReactNode;
