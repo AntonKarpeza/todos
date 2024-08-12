@@ -29,7 +29,7 @@ services:
   todo-client:
     build:
       context: ./src/todos-app
-      dockerfile: Dockerfile # Update to the correct Dockerfile path if needed
+      dockerfile: Dockerfile
     ports:
       - "3000:80"
     networks:
