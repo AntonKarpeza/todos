@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -10,6 +8,38 @@ services:
       - "1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
+    networks:
+      - app_network
+
+  todo-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=TodoDb;User=sa;Password=Your_password123;TrustServerCertificate=True;
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:80"
+    networks:
+      - app_network
+    depends_on:
+      - mssql
+
+  todo-client:
+    build:
+      context: ./src/todos-app
+      dockerfile: Dockerfile # Update to the correct Dockerfile path if needed
+    ports:
+      - "3000:80"
+    networks:
+      - app_network
+    depends_on:
+      - todo-api
 
 volumes:
   mssql_data:
+
+networks:
+  app_network:
+    driver: bridge

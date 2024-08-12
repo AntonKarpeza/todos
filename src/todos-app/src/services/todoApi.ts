@@ -2,10 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TodoTaskViewModel } from '../interfaces/TodoTaskViewModel';
 import { FilterTodoTasksViewModel } from '../interfaces/FilterTodoTasksViewModel';
 import { PaginatedListViewModel } from '../interfaces/PaginatedListViewModel';
+import process from 'process';
 
 export const todoApi = createApi({
   reducerPath: 'todoApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://localhost:7054/v1/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_TODO_API_V1_BASE_URL }),
   endpoints: (builder) => ({
     getTodoTasks: builder.query<PaginatedListViewModel<TodoTaskViewModel>, FilterTodoTasksViewModel>({
       query: (filter) => ({
